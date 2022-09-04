@@ -1,0 +1,32 @@
+version: "3.4"
+
+services:
+  stable-diffusion:
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+    image: ghcr.io/luxbit/stable-diffusion-docker
+    ports:
+      - 5000:5000
+    container_name: stable-diffusion
+    environment:
+      PROMPT: "A high tech solarpunk utopia in the Amazon rainforest"
+      N_SAMPLES: 1
+      HEIGHT: 512
+      WIDTH: 512
+      SCALE: 7.5
+      DDIM_STEPS: 50
+      SEED: 0
+      SAFETY_CHECK: 'True'
+      FLOAT32: 'True'  
+    volumes:  
+      - ./huggingface:/home/huggingface/.cache/huggingface 
+      - ./output:/home/huggingface/output
+    command: docker-entrypoint.py
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import argparse, datetime, random, time
 import torch
+import os
 from torch import autocast
 from diffusers import StableDiffusionPipeline
 
@@ -66,44 +67,71 @@ def main():
         help="The prompt to render into an image",
     )
     parser.add_argument(
-        "--prompt", type=str, nargs="?", help="The prompt to render into an image"
+        "--prompt", 
+        type=str, 
+        nargs="?", 
+        help="The prompt to render into an image"
     )
     parser.add_argument(
-        "--n_samples", type=int, nargs="?", default=1, help="Number of images to create"
+        "--n_samples", 
+        type=int, 
+        nargs="?", 
+        default= (int(os.environ["N_SAMPLES"]) if 'N_SAMPLES' in os.environ() else 1), 
+        help="Number of images to create"
     )
     parser.add_argument(
-        "--H", type=int, nargs="?", default=512, help="Image height in pixels"
+        "--H", 
+        type=int, 
+        nargs="?", 
+        default=(int(os.environ["HEIGHT"]) if 'HEIGHT' in os.environ() else 512), 
+        help="Image height in pixels"
     )
     parser.add_argument(
-        "--W", type=int, nargs="?", default=512, help="Image width in pixels"
+        "--W", 
+        type=int, 
+        nargs="?", 
+        default=(int(os.environ["WIDTH"]) if 'WIDTH' in os.environ() else 512), 
+        help="Image width in pixels"
     )
     parser.add_argument(
         "--scale",
         type=float,
         nargs="?",
-        default=7.5,
+        default=(float(os.environ["SCALE"]) if 'SCALE' in os.environ() else 7.5), 
         help="Classifier free guidance scale",
     )
     parser.add_argument(
-        "--seed", type=int, nargs="?", default=0, help="RNG seed for repeatability"
+        "--seed", 
+        type=int, 
+        nargs="?", 
+        default=(int(os.environ["SEED"]) if 'SEED' in os.environ() else 0), 
+        help="RNG seed for repeatability"
     )
     parser.add_argument(
-        "--ddim_steps", type=int, nargs="?", default=50, help="Number of sampling steps"
+        "--ddim_steps", 
+        type=int, 
+        nargs="?", 
+        default=(os.environ["DDIM_STEPS"] if 'DDIM_STEPS' in os.environ() else 50), 
+        help="Number of sampling steps"
     )
+
+    FLOAT32 = (os.getenv('DEBUG', 'False') == 'True')
     parser.add_argument(
         "--half",
         type=bool,
         nargs="?",
         const=True,
-        default=False,
+        default=FLOAT32,
         help="Use float16 (half-sized) tensors instead of float32",
     )
+
+    SAFETY_CHECK = (os.getenv('SAFETY_CHECK', 'False') == 'True')
     parser.add_argument(
         "--skip",
         type=bool,
         nargs="?",
         const=True,
-        default=False,
+        default=SAFETY_CHECK,
         help="Skip the safety checker",
     )
 
