@@ -5,7 +5,7 @@ services:
     build: 
       context: ./
       dockerfile: Dockerfile
-    image: ghcr.io/luxbit/stable-diffusion-docker
+    image: ghcr.io/luxbit/stable-diffusion-docker:latest
     ports:
       - 5000:5000
     container_name: stable-diffusion
@@ -22,7 +22,7 @@ services:
     volumes:  
       - ./huggingface:/home/huggingface/.cache/huggingface 
       - ./output:/home/huggingface/output
-    command: docker-entrypoint.py
+    command: bash
     deploy:
       resources:
         reservations:

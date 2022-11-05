@@ -29,7 +29,7 @@ def stable_diffusion(prompt, samples, height, width, steps, scale, seed, half, s
         model_name, torch_dtype=dtype, revision=rev, use_auth_token=token
     ).to(device)
 
-    if skip:
+    # if skip:
         pipe.safety_checker = skip_safety_checker
 
     print("loaded models after:", iso_date_time())
@@ -76,42 +76,42 @@ def main():
         "--n_samples", 
         type=int, 
         nargs="?", 
-        default= (int(os.environ["N_SAMPLES"]) if 'N_SAMPLES' in os.environ() else 1), 
+        default= (int(os.environ["N_SAMPLES"]) if 'N_SAMPLES' in os.environ else 1), 
         help="Number of images to create"
     )
     parser.add_argument(
         "--H", 
         type=int, 
         nargs="?", 
-        default=(int(os.environ["HEIGHT"]) if 'HEIGHT' in os.environ() else 512), 
+        default=(int(os.environ["HEIGHT"]) if 'HEIGHT' in os.environ else 512), 
         help="Image height in pixels"
     )
     parser.add_argument(
         "--W", 
         type=int, 
         nargs="?", 
-        default=(int(os.environ["WIDTH"]) if 'WIDTH' in os.environ() else 512), 
+        default=(int(os.environ["WIDTH"]) if 'WIDTH' in os.environ else 512), 
         help="Image width in pixels"
     )
     parser.add_argument(
         "--scale",
         type=float,
         nargs="?",
-        default=(float(os.environ["SCALE"]) if 'SCALE' in os.environ() else 7.5), 
+        default=(float(os.environ["SCALE"]) if 'SCALE' in os.environ else 7.5), 
         help="Classifier free guidance scale",
     )
     parser.add_argument(
         "--seed", 
         type=int, 
         nargs="?", 
-        default=(int(os.environ["SEED"]) if 'SEED' in os.environ() else 0), 
+        default=(int(os.environ["SEED"]) if 'SEED' in os.environ else 0), 
         help="RNG seed for repeatability"
     )
     parser.add_argument(
         "--ddim_steps", 
         type=int, 
         nargs="?", 
-        default=(os.environ["DDIM_STEPS"] if 'DDIM_STEPS' in os.environ() else 50), 
+        default=(os.environ["DDIM_STEPS"] if 'DDIM_STEPS' in os.environ else 50), 
         help="Number of sampling steps"
     )
 
